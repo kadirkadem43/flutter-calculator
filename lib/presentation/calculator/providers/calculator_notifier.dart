@@ -55,8 +55,11 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
     String currentExp = state.expression;
     String input = state.currentInput;
 
-    if (state.isNewCalculation && state.result.isNotEmpty) {
-      input = state.result;
+    if (state.isNewCalculation) {
+      currentExp = '';
+      if (state.result.isNotEmpty) {
+        input = state.result;
+      }
     }
 
     // If there is an input, append to expression
@@ -147,18 +150,24 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
   void onPercentage() {
     if (state.hasError) return;
     
-    // In our AST, % is a suffix operator. We can just append it to input and evaluate if needed,
-    // or just append to expression for full AST handling.
-    // For a standard calculator, pressing % immediately converts the current input.
+    if (state.isNewCalculation) {
+      try {
+        final res = _engine.evaluate(state.result + '%', angleMode: state.angleMode);
+        state = state.copyWith(
+          currentInput: res,
+          expression: '',
+          isNewCalculation: true,
+        );
+      } catch (_) {}
+      return;
+    }
+
     if (state.expression.isEmpty) {
-      // 10% -> 0.1
       try {
         final res = _engine.evaluate(state.currentInput + '%', angleMode: state.angleMode);
         state = state.copyWith(currentInput: res);
       } catch (_) {}
     } else {
-      // We append it to expression and let evaluator handle context when '=' is pressed, 
-      // or evaluate immediately. Let's append to input to be safe for `50 + 25%`
       state = state.copyWith(currentInput: state.currentInput + '%');
     }
   }
@@ -167,10 +176,20 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
     if (state.hasError) return;
     if (state.currentInput == '0') return;
 
+    String newInput;
     if (state.currentInput.startsWith('-')) {
-      state = state.copyWith(currentInput: state.currentInput.substring(1));
+      newInput = state.currentInput.substring(1);
     } else {
-      state = state.copyWith(currentInput: '-' + state.currentInput);
+      newInput = '-' + state.currentInput;
+    }
+
+    if (state.isNewCalculation) {
+      state = state.copyWith(
+        currentInput: newInput,
+        expression: '',
+      );
+    } else {
+      state = state.copyWith(currentInput: newInput);
     }
   }
 
@@ -180,8 +199,11 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
     String currentExp = state.expression;
     String input = state.currentInput;
 
-    if (state.isNewCalculation && state.result.isNotEmpty) {
-      input = state.result;
+    if (state.isNewCalculation) {
+      currentExp = '';
+      if (state.result.isNotEmpty) {
+        input = state.result;
+      }
     }
 
     if (input != '0' && input.isNotEmpty) {
@@ -202,6 +224,7 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
     
     state = state.copyWith(
       currentInput: constant,
+      expression: state.isNewCalculation ? '' : state.expression,
       isNewCalculation: false,
     );
   }
@@ -227,6 +250,7 @@ class CalculatorNotifier extends StateNotifier<CalculatorState> {
     
     state = state.copyWith(
       currentInput: state.memoryValue,
+      expression: state.isNewCalculation ? '' : state.expression,
       isNewCalculation: false,
     );
   }
