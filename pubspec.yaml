@@ -42,6 +42,12 @@ dev_dependencies:
   # Hive generator for type adapters
   build_runner: ^2.4.9
   hive_generator: ^2.0.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.jpg"
 
 flutter:
   uses-material-design: true
