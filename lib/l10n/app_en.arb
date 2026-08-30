@@ -1,0 +1,19 @@
+{
+  "@@locale": "en",
+  "appTitle": "Calculator",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "history": "History",
+  "clearHistory": "Clear History",
+  "noHistory": "No history yet",
+  "settings": "Settings",
+  "theme": "Theme",
+  "themeSystem": "System Default",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "appearance": "Appearance",
+  "errorDivideByZero": "Cannot divide by zero",
+  "errorInvalidFormat": "Invalid format",
+  "errorGeneric": "Error"
+}

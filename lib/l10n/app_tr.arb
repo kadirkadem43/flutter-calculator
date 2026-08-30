@@ -1,0 +1,16 @@
+{
+  "@@locale": "tr",
+  "appTitle": "Hesap Makinesi",
+  "history": "Geçmiş",
+  "settings": "Ayarlar",
+  "theme": "Tema",
+  "appearance": "Görünüm",
+  "themeSystem": "Sistem",
+  "themeLight": "Açık",
+  "themeDark": "Koyu",
+  "clearHistory": "Geçmişi Temizle",
+  "noHistory": "Henüz geçmiş yok",
+  "errorDivideByZero": "Sıfıra bölünemez",
+  "errorInvalidFormat": "Geçersiz format",
+  "errorGeneric": "Hata"
+}
